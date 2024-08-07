@@ -1,18 +1,100 @@
 * {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
-.main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content:  center;
+li {
+  list-style: none;
 }
 
-.json {
-    width: 400px;
-    height: 400px;
-    overflow: scroll;
-    text-wrap: wrap;
+body {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+#content {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5vh;
+  padding: 10vh;
+}
+
+.top-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  overflow: scroll;
+  width: 80%;
+}
+
+.top-left {
+  display: flex;
+  gap: 1vh;
+}
+
+.top-left-col1 {
+  display: flex;
+  font-size: 3rem;
+}
+
+.top-left-col2 {
+  display: flex;
+  flex-direction: column;
+  font-size: medium;
+}
+
+.top-right {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.bot-section {
+  display: flex;
+  gap: 5vh;
+}
+
+#bot-card {
+  padding: 1vh;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  border: 1px black solid;
+  border-radius: 10px;
+}
+
+.bot-card-hour {
+  display: flex;
+  width: 50vw;
+  justify-content: space-between;
+  gap: 5vh;
+
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  top: 40%;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.bot-card-hour-data {
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+}
+
+.hour-hidden {
+  display: none;
+}
+
+#myChart {
+  position: absolute;
+  width: 700px;
+  height: 600px;
+  z-index: -1;
 }

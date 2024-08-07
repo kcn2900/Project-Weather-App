@@ -1,6 +1,13 @@
 function Day(obj) {
     const data = obj.data;
     const dayName = obj.dayName;
+    const hour = obj.hour;
+    const hours = [];
+
+    // hour with hottest condition
+    const defaultHour = [...data.hours]
+        .sort((a, b) => a.temp - b.temp)[23];
+
     const day = {
         maxTemp: data.tempmax,
         minTemp: data.tempmin,
@@ -9,13 +16,26 @@ function Day(obj) {
         windSpeed: data.windspeed,
         conditions: data.conditions,
     };
-    const hours = populateHours(data.hours)
 
-    function populateHours(hourArray) {
+    const populateHours = (nextDay = null) => {
+        for (let i = hour; i <= (hour + 21); i += 3) {
+            const hourData = i >= 24 ? nextDay.hours[i - 24] : data.hours[i];
+            const hourDayName = i >= 24 ? nextDay.dayName : dayName;
+            const hourTime = i >= 24 ? i - 24 : i;
 
+            const hourObj = {
+                data: hourData,
+                dayName: hourDayName,
+                time: hourTime,
+            };
+            hours.push(hourObj);
+        }
     }
 
-    return {  }
+    return {
+        day, dayName, hour, hours, defaultHour,
+        populateHours
+    }
 }
 
 export { Day };
