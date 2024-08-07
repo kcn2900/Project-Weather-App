@@ -162,7 +162,6 @@ function handleTop(info) {
 }
 
 function handleChart(info) {
-    const day = info.day
     const hourArray = info.hours;
     const xValues = [];
     const yValues = [];
@@ -204,7 +203,8 @@ function handleChart(info) {
                     tooltip: {
                         enabled: true,
                     }
-                }
+                },
+                responsive: false,
             }
         });
     }

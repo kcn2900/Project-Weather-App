@@ -18,8 +18,9 @@ function Day(obj) {
     };
 
     const populateHours = (nextDay = null) => {
+        let nextIndex = 0;
         for (let i = hour; i <= (hour + 21); i += 3) {
-            const hourData = i >= 24 ? nextDay.hours[i - 24] : data.hours[i];
+            const hourData = i >= 24 ? nextDay.hours[nextIndex++].data : data.hours[i];
             const hourDayName = i >= 24 ? nextDay.dayName : dayName;
             const hourTime = i >= 24 ? i - 24 : i;
 

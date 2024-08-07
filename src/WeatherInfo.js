@@ -1,9 +1,6 @@
 import { Day } from './DayOfWeek';
 
 function WeatherInfo(data) {
-    // don't actually need below because we just retrieve them based on 
-    // either max temp day hour, chosen temp, nvm we do
-
     // get current day and hour based on location
     const curr = data.currentConditions;
     const currentDate = new Date(`${data.days[0].datetime}T${curr.datetime}`);
@@ -36,6 +33,8 @@ function WeatherInfo(data) {
                 hour: tempHour,
             }));
             
+            tempDate.setDate(tempDate.getDate() + 1); // increment day
+
             // fill in each day's tri-hourly weather condition
             if (i !== 0) {
                 tempArray[i].populateHours();

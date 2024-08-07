@@ -10,22 +10,22 @@ import key from './api_key.json';
     const content = document.getElementById('content');
 
     // temporary use static data to test code before using api calls
-    console.log(tempJSON);
-    const json = JSON.stringify(tempJSON);
-    const info = WeatherInfo(tempJSON);
-    const DomHandler = Display(info, content);
+    // console.log(tempJSON);
+    // const json = JSON.stringify(tempJSON);
+    // const info = WeatherInfo(tempJSON);
+    // const DomHandler = Display(info, content);
 
-    // callAPI()
-    // .then((data) => {
-    //     const json = JSON.stringify(data);
-    //     const info = WeatherInfo(json);
-
-    //     const DomHandler = Display(info, content);
-    // })
-    // .catch((err) => {
-    //     alert(err);
-    //     console.log(err);
-    // })
+    callAPI()
+    .then((data) => {
+        // const json = JSON.stringify(data);
+        const info = WeatherInfo(data);
+        console.log(info.days);
+        const DomHandler = Display(info, content);
+    })
+    .catch((err) => {
+        alert(err);
+        console.log(err);
+    })
 
 })()
 
