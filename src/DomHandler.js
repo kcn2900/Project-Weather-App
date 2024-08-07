@@ -2,11 +2,12 @@ import Chart from 'chart.js/auto';
 
 const topSection = document.createElement('div');
 const botSection = document.createElement('div');
+let myChart;
 
 function Display(info, content) {
     const canvas = document.createElement('canvas');
-    canvas.id = 'myChart';
 
+    canvas.id = 'myChart';
     topSection.className = 'top-section';
     botSection.className = 'bot-section';
 
@@ -16,8 +17,6 @@ function Display(info, content) {
 
     topSection.append(...handleTop(info));
     botSection.append(...createCard(info.days));
-    
-    handleChart();
 }
 
 function createCard(dayArray) {
@@ -40,7 +39,7 @@ function createCard(dayArray) {
 
         shortDayName.textContent = dayArray[i].dayName.slice(0, 3);
         dualTemp.textContent =
-            `${day.maxTemp} / ${day.minTemp}`;
+            `${day.maxTemp}\u00B0 / ${day.minTemp}\u00B0`;
 
         tempDiv.addEventListener('click', (e) => {
             const target = e.target.id;
@@ -48,6 +47,7 @@ function createCard(dayArray) {
                 switchTop({ ...day, dayName: dayArray[i].dayName });
                 hideHourCard();
                 tempHour.classList.remove('hour-hidden');
+                handleChart(dayArray[i]);
             }
         });
         result.push(tempDiv);
@@ -75,18 +75,8 @@ function createHourCard(hourArray) {
 
         div.className = 'bot-card-hour-data';
 
-        let timeChange;
-        if (time === 0)
-            timeChange = `12 AM`;
-        else if (time < 12)
-            timeChange = `${time} AM`;
-        else if (time === 12)
-            timeChange = `12 PM`;
-        else
-            timeChange = `${time - 12} PM`;
-
-        timeElement.textContent = timeChange;
-        tempElement.textContent = data.temp;
+        timeElement.textContent = time;
+        tempElement.textContent = `${data.temp}\u00B0`;
 
         div.append(timeElement, tempElement);
 
@@ -120,25 +110,13 @@ function switchTop(info) {
     const [temp, list] = left.children;
     const [_, dayAndTime, conditions] = right.children;
 
-    temp.textContent = info.temperature ? info.temperature : info.maxTemp;
+    temp.textContent = `${info.temperature ? info.temperature : info.maxTemp}\u00B0`;
     list.children[0].textContent = `Precipitation: ${info.precipitation}%`;
     list.children[1].textContent = `Humidity: ${info.humidity}%`;
     list.children[2].textContent = `Wind: ${info.windSpeed} mph`;
 
-    let timeChange;
-    if (info.time) {
-        if (info.time === 0)
-            timeChange = `12:00 AM`;
-        else if (info.time < 12)
-            timeChange = `${info.time}:00 AM`;
-        else if (info.time === 12)
-            timeChange = `12:00 PM`;
-        else
-            timeChange = `${info.time - 12}:00 PM`;
-    }
-
     dayAndTime.textContent = `${info.dayName}${info.time ?
-        ` ${timeChange}`
+        ` ${info.time}`
         : ''}`;
     conditions.textContent = info.conditions;
 }
@@ -161,7 +139,7 @@ function handleTop(info) {
     left.append(leftCol1, leftCol2);
     leftCol2.append(item1, item2, item3);
 
-    leftCol1.textContent = curr.temperature;
+    leftCol1.textContent = `${curr.temperature}\u00B0`;
     item1.textContent = `Precipitation: ${curr.precipitation}%`;
     item2.textContent = `Humidity: ${curr.humidity}%`;
     item3.textContent = `Wind: ${curr.windSpeed} mph`;
@@ -184,46 +162,58 @@ function handleTop(info) {
 }
 
 function handleChart(info) {
-    const xValues = []
-    for (let i = 0; i < 25; i++)
-        xValues.push(i);
+    const day = info.day
+    const hourArray = info.hours;
+    const xValues = [];
+    const yValues = [];
 
-    const yValues = [0, 1, 2, 3, 4, 5, 6];
+    for (let i = 0; i < hourArray.length; i++) {
+        xValues.push(hourArray[i].time);
+        yValues.push(hourArray[i].data.temp);
+    }
 
-    new Chart('myChart', {
-        type: 'line',
-        data: {
-            labels: xValues,
-            datasets: [{
-                backgroundColor: "rgba(0,0,255,1.0)",
-                borderColor: "rgba(0,0,255,0.1)",
-                data: null,
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    grid: {
+    if (!myChart) {
+        myChart = new Chart('myChart', {
+            type: 'line',
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: yValues,
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                        },
+                    },
+                    // y: {
+                    //     grid: {
+                    //         display: false,
+                    //     }
+                    // }
+
+                },
+                plugins: {
+                    legend: {
                         display: false,
                     },
-                },
-                y: {
-                    grid: {
-                        display: false,
+                    tooltip: {
+                        enabled: true,
                     }
                 }
-
-            },
-            plugins: {
-                legend: {
-                    display: false,
-                },
-                tooltip: {
-                    enabled: true,
-                }
             }
-        }
-    });
+        });
+    }
+    else {
+        // console.log(myChart.data.datasets[0].data);
+        myChart.data.datasets[0].labels = xValues;
+        myChart.data.datasets[0].data = yValues;
+        myChart.update();
+    }
 }
 
 export { Display };

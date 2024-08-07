@@ -23,10 +23,20 @@ function Day(obj) {
             const hourDayName = i >= 24 ? nextDay.dayName : dayName;
             const hourTime = i >= 24 ? i - 24 : i;
 
+            let timeChange;
+            if (hourTime === 0)
+                timeChange = `12:00 AM`;
+            else if (hourTime < 12)
+                timeChange = `${hourTime}:00 AM`;
+            else if (hourTime === 12)
+                timeChange = `12:00 PM`;
+            else
+                timeChange = `${hourTime - 12}:00 PM`;
+
             const hourObj = {
                 data: hourData,
                 dayName: hourDayName,
-                time: hourTime,
+                time: timeChange,
             };
             hours.push(hourObj);
         }
