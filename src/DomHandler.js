@@ -4,12 +4,19 @@ const topSection = document.createElement('div');
 const botSection = document.createElement('div');
 let myChart;
 
-function Display(info, content) {
+function Display(info) {
+    const content = document.getElementById('content');
     const canvas = document.createElement('canvas');
 
     canvas.id = 'myChart';
     topSection.className = 'top-section';
     botSection.className = 'bot-section';
+
+    // reset DOM when user inputs a new location
+    content.replaceChildren(content.children[0]);
+    topSection.replaceChildren();
+    botSection.replaceChildren();
+    myChart = undefined;
 
     content.append(canvas);
     content.append(topSection);
@@ -210,7 +217,7 @@ function handleChart(info) {
     }
     else {
         // console.log(myChart.data.datasets[0].data);
-        myChart.data.datasets[0].labels = xValues;
+        myChart.data.labels = xValues;
         myChart.data.datasets[0].data = yValues;
         myChart.update();
     }
